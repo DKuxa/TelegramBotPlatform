@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: TelegramBotPlatform
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/multibot}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+admin:
+  bot:
+    token: ${ADMIN_BOT_TOKEN}
+    name: ${ADMIN_BOT_NAME}

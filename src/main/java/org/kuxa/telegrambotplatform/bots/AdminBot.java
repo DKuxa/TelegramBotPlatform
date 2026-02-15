@@ -5,6 +5,7 @@ import org.kuxa.telegrambotplatform.core.BotRegistry;
 import org.kuxa.telegrambotplatform.domain.ErrorLog;
 import org.kuxa.telegrambotplatform.repository.ActionLogRepository;
 import org.kuxa.telegrambotplatform.repository.ErrorLogRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -26,7 +27,7 @@ public class AdminBot extends BaseTelegramBot {
             @Value("${admin.bot.token}") String botToken,
             @Value("${admin.bot.name:AdminSystemBot}") String botName,
             @Value("${admin.chat.id}") Long adminChatId,
-            BotRegistry botRegistry,
+            @Lazy BotRegistry botRegistry,
             ActionLogRepository actionLogRepository,
             ErrorLogRepository errorLogRepository) {
         super(botToken, botName);

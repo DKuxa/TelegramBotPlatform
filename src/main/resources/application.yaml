@@ -22,3 +22,13 @@ admin:
   bot:
     token: ${ADMIN_BOT_TOKEN}
     name: ${ADMIN_BOT_NAME}
+  chat:
+    id: ${ADMIN_CHAT_ID}
+
+logging:
+  level:
+    root: INFO
+    org.kuxa.telegrambotplatform.core: DEBUG
+    org.kuxa.telegrambotplatform.aop: TRACE
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG

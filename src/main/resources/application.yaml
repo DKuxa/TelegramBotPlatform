@@ -25,6 +25,28 @@ admin:
   chat:
     id: ${ADMIN_CHAT_ID}
 
+# MediaInfoBot configuration for publishing media content
+media:
+  bot:
+    token: ${MEDIA_BOT_TOKEN}
+    name: ${MEDIA_BOT_NAME:MediaInfoBot}
+  channel:
+    id: ${MEDIA_CHANNEL_ID}
+
+# TMDB API configuration (optional)
+tmdb:
+  api:
+    key: ${TMDB_API_KEY:}
+  poster:
+    base:
+      url: ${TMDB_POSTER_BASE_URL:https://image.tmdb.org/t/p/w500}
+
+# Web server settings
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+
 logging:
   level:
     root: INFO

@@ -6,12 +6,11 @@ import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateC
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+@Getter
 public abstract class BaseTelegramBot implements LongPollingSingleThreadUpdateConsumer {
 
-    @Getter
     private final String botToken;
 
-    @Getter
     private final String botName;
 
     protected final TelegramClient telegramClient;

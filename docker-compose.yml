@@ -29,6 +29,10 @@ services:
       - ADMIN_BOT_TOKEN=${ADMIN_BOT_TOKEN}
       - ADMIN_BOT_NAME=${ADMIN_BOT_NAME}
       - ADMIN_CHAT_ID=${ADMIN_CHAT_ID}
+      - MEDIA_BOT_TOKEN=${MEDIA_BOT_TOKEN}
+      - MEDIA_BOT_NAME=${MEDIA_BOT_NAME:-MediaInfoBot}
+      - MEDIA_CHANNEL_ID=${MEDIA_CHANNEL_ID}
+      - TMDB_API_KEY=${TMDB_API_KEY:-}
     ports:
       - "8080:8080"
 

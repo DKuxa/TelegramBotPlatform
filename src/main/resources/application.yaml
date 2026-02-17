@@ -1,56 +1,25 @@
 spring:
   application:
-    name: TelegramBotPlatform
-  datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/multibot}
-    username: ${DB_USER:postgres}
-    password: ${DB_PASSWORD:postgres}
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
+    name: telegram-gateway-service
 
-admin:
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: ${RABBITMQ_VHOST:/}
+
+# Gateway bot token — the single Telegram bot that acts as the gateway
+gateway:
   bot:
-    token: ${ADMIN_BOT_TOKEN}
-    name: ${ADMIN_BOT_NAME}
-  chat:
-    id: ${ADMIN_CHAT_ID}
-
-# MediaInfoBot configuration for publishing media content
-media:
-  bot:
-    token: ${MEDIA_BOT_TOKEN}
-    name: ${MEDIA_BOT_NAME:MediaInfoBot}
-  channel:
-    id: ${MEDIA_CHANNEL_ID}
-
-# TMDB API configuration (optional)
-tmdb:
-  api:
-    key: ${TMDB_API_KEY:}
-  poster:
-    base:
-      url: ${TMDB_POSTER_BASE_URL:https://image.tmdb.org/t/p/w500}
+    token: ${GATEWAY_BOT_TOKEN}
 
 # Web server settings
 server:
   port: ${SERVER_PORT:8080}
-  servlet:
-    context-path: /
 
 logging:
   level:
     root: INFO
-    org.kuxa.telegrambotplatform.core: DEBUG
-    org.kuxa.telegrambotplatform.aop: TRACE
-    org.springframework.web: INFO
-    org.hibernate.SQL: DEBUG
+    org.kuxa.telegrambotplatform: DEBUG
+    org.springframework.amqp: INFO

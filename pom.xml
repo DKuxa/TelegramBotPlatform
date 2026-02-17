@@ -13,53 +13,41 @@
     <groupId>org.kuxa</groupId>
     <artifactId>TelegramBotPlatform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>TelegramBotPlatform</name>
-    <description>TelegramBotPlatform</description>
+    <name>telegram-gateway-service</name>
+    <description>Telegram Gateway Service — forwards Updates to RabbitMQ and sends replies back</description>
 
     <properties>
         <java.version>21</java.version>
-        <assertj.version>3.27.7</assertj.version>
         <start-class>org.kuxa.telegrambotplatform.TelegramBotPlatformApplication</start-class>
     </properties>
 
     <dependencies>
+        <!-- Web (needed by Spring Boot context) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- RabbitMQ / AMQP -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
+        <!-- JSON serialization -->
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-database-postgresql</artifactId>
-        </dependency>
-
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.18.0</version>
-        </dependency>
-
+        <!-- Telegram Bots SDK -->
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-springboot-longpolling-starter</artifactId>
@@ -71,6 +59,7 @@
             <version>9.2.1</version>
         </dependency>
 
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

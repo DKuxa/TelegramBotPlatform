@@ -3,7 +3,11 @@
     "allow": [
       "Bash(git checkout:*)",
       "Bash(git -C \"C:/Users/user/IdeaProjects/TelegramBotPlatform\" rm -f src/main/java/org/kuxa/telegrambotplatform/domain/AppUser.java src/main/java/org/kuxa/telegrambotplatform/domain/ActionLog.java src/main/java/org/kuxa/telegrambotplatform/domain/ErrorLog.java src/main/java/org/kuxa/telegrambotplatform/domain/WebhookEvent.java src/main/java/org/kuxa/telegrambotplatform/repository/ActionLogRepository.java src/main/java/org/kuxa/telegrambotplatform/repository/ErrorLogRepository.java src/main/java/org/kuxa/telegrambotplatform/repository/WebhookEventRepository.java src/main/java/org/kuxa/telegrambotplatform/bots/AdminBot.java src/main/java/org/kuxa/telegrambotplatform/bots/MediaInfoBot.java src/main/java/org/kuxa/telegrambotplatform/service/WebhookRoutingService.java src/main/java/org/kuxa/telegrambotplatform/service/MediaNotificationService.java src/main/java/org/kuxa/telegrambotplatform/aop/GlobalExceptionAspect.java src/main/java/org/kuxa/telegrambotplatform/aop/LoggingAspect.java src/main/java/org/kuxa/telegrambotplatform/controller/WebhookController.java src/main/java/org/kuxa/telegrambotplatform/dto/webhook/RadarrWebhookDTO.java src/main/java/org/kuxa/telegrambotplatform/dto/webhook/SonarrWebhookDTO.java src/main/java/org/kuxa/telegrambotplatform/dto/webhook/TrueNasAlertDTO.java src/main/java/org/kuxa/telegrambotplatform/core/BaseTelegramBot.java src/main/java/org/kuxa/telegrambotplatform/core/BotRegistry.java src/main/java/org/kuxa/telegrambotplatform/config/TelegramBotConfig.java src/main/resources/db/migration/V1__init.sql src/main/resources/db/migration/V2__webhook_events.sql)",
-      "Bash(git -C \"C:/Users/user/IdeaProjects/TelegramBotPlatform\" status)"
+      "Bash(git -C \"C:/Users/user/IdeaProjects/TelegramBotPlatform\" status)",
+      "Bash(./mvnw compile:*)",
+      "Bash(echo:*)",
+      "Bash(mvn compile:*)",
+      "Bash(dir:*)"
     ]
   }
 }

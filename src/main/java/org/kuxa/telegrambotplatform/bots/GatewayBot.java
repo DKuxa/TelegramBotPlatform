@@ -1,43 +1,36 @@
 package org.kuxa.telegrambotplatform.bots;
 
-import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.kuxa.telegrambotplatform.config.GatewayProperties;
 import org.kuxa.telegrambotplatform.config.RabbitConfiguration;
 import org.kuxa.telegrambotplatform.dto.BotRequest;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
 import org.telegram.telegrambots.longpolling.starter.SpringLongPollingBot;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 /**
  * The sole Telegram bot in the Gateway Service.
  * Receives every incoming Update and forwards it as a {@link BotRequest}
  * to the {@code telegram.updates} RabbitMQ queue — no business logic here.
  */
+@Slf4j
 @Component
 public class GatewayBot implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
 
-    @Getter
-    private final TelegramClient telegramClient;
-
-    private final String botToken;
+    private final GatewayProperties properties;
     private final RabbitTemplate rabbitTemplate;
 
-    public GatewayBot(
-            @Value("${gateway.bot.token}") String botToken,
-            RabbitTemplate rabbitTemplate) {
-        this.botToken = botToken;
-        this.telegramClient = new OkHttpTelegramClient(botToken);
+    public GatewayBot(GatewayProperties properties, RabbitTemplate rabbitTemplate) {
+        this.properties = properties;
         this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
     public String getBotToken() {
-        return botToken;
+        return properties.token();
     }
 
     @Override
@@ -47,7 +40,8 @@ public class GatewayBot implements SpringLongPollingBot, LongPollingSingleThread
 
     @Override
     public void consume(Update update) {
-        BotRequest request = new BotRequest(botToken, update);
+        log.debug("Received update id={} from Telegram", update.getUpdateId());
+        BotRequest request = new BotRequest(properties.token(), update);
         rabbitTemplate.convertAndSend(RabbitConfiguration.UPDATES_QUEUE, request);
     }
 }

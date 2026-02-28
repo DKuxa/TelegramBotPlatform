@@ -1,6 +1,5 @@
-version: '3.8'
-
 services:
+  # ── PostgreSQL ──
   db:
     image: postgres:15-alpine
     container_name: multibot_postgres
@@ -14,27 +13,69 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  app:
+  # ── RabbitMQ ──
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: multibot_rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Telegram Gateway (принимает сообщения из Telegram, отправляет в RabbitMQ) ──
+  gateway:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: multibot_app
+    container_name: multibot_gateway
     restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     environment:
       - DB_URL=jdbc:postgresql://db:5432/${DB_NAME:-multibot}
       - DB_USER=${DB_USER:-postgres}
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
-      - ADMIN_BOT_TOKEN=${ADMIN_BOT_TOKEN}
-      - ADMIN_BOT_NAME=${ADMIN_BOT_NAME}
-      - ADMIN_CHAT_ID=${ADMIN_CHAT_ID}
-      - MEDIA_BOT_TOKEN=${MEDIA_BOT_TOKEN}
-      - MEDIA_BOT_NAME=${MEDIA_BOT_NAME:-MediaInfoBot}
-      - MEDIA_CHANNEL_ID=${MEDIA_CHANNEL_ID}
-      - TMDB_API_KEY=${TMDB_API_KEY:-}
+      - GATEWAY_BOT_TOKEN=${BOT_TOKEN}
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=${RABBITMQ_USER:-guest}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASS:-guest}
     ports:
       - "8080:8080"
 
+  # ── TrueNAS Worker (читает из RabbitMQ, общается с TrueNAS API) ──
+  worker:
+    build:
+      context: ${WORKER_BUILD_CONTEXT:-../TrueNasAdmin}
+      dockerfile: Dockerfile
+    container_name: multibot_worker
+    restart: unless-stopped
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=${RABBITMQ_USER:-guest}
+      - RABBITMQ_PASS=${RABBITMQ_PASS:-guest}
+      - TRUENAS_URL=${TRUENAS_URL}
+      - TRUENAS_API_KEY=${TRUENAS_API_KEY}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - ADMIN_CHAT_ID=${ADMIN_CHAT_ID}
+
 volumes:
   pgdata:
+  rabbitmq_data:
